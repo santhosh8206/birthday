@@ -119,17 +119,26 @@ export default function App() {
   }, []);
 
   const createConfetti = () => {
-    for (let i = 0; i < 50; i++) {
+    const colors = ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ffffff'];
+    for (let i = 0; i < 70; i++) {
       const div = document.createElement("div");
-      div.className = "fixed w-2 h-2 bg-white top-1/2 left-1/2";
+      div.className = "fixed w-2 h-2 rounded-full z-50 pointer-events-none";
+      div.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      div.style.top = "50%";
+      div.style.left = "50%";
       document.body.appendChild(div);
 
+      const angle = Math.random() * Math.PI * 2;
+      const velocity = Math.random() * 400 + 200;
+      
       anime({
         targets: div,
-        translateX: anime.random(-300, 300),
-        translateY: anime.random(-300, 300),
+        translateX: Math.cos(angle) * velocity,
+        translateY: Math.sin(angle) * velocity,
         opacity: [1, 0],
-        duration: 1500,
+        scale: [1, 0.5],
+        rotate: () => anime.random(-360, 360),
+        duration: 2000,
         ease: "easeOutExpo",
         onComplete: () => div.remove(),
       });
@@ -137,7 +146,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-indigo-950 to-purple-950 animate-gradient text-white flex flex-col items-center justify-center overflow-hidden relative selection:bg-purple-500/30">
+    <div className={`min-h-screen bg-gradient-to-br from-black via-indigo-950 to-purple-950 animate-gradient text-white flex flex-col items-center ${opened ? 'justify-start md:justify-center pt-8 md:pt-0' : 'justify-center'} overflow-x-hidden relative selection:bg-purple-500/30 p-4`}>
       {/* Cinematic Loader */}
       {loading && (
         <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center animate-fade-out">
@@ -163,14 +172,14 @@ export default function App() {
             height: `${star.size}px`,
             backgroundColor: star.color,
             boxShadow: `0 0 ${star.size * 2}px ${star.color}`,
-            animation: `float ${star.duration}ms infinite linear`,
+            animation: `twinkle ${star.duration}ms infinite ease-in-out`,
             animationDelay: `${star.delay}ms`,
           }}
         />
       ))}
       
-      {/* Subtle background glow aura */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.15),transparent_70%)] pointer-events-none" />
+      {/* Cinematic Pulse Glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.2),transparent_80%)] pointer-events-none animate-pulse" />
       <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none" />
       
       <div className="relative z-10 w-full flex flex-col items-center justify-center">
@@ -178,13 +187,13 @@ export default function App() {
         <div className="text-center cursor-pointer relative" onClick={breakGift}>
           <div
             ref={giftRef}
-            className="w-64 h-64 bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-2xl transition-transform hover:scale-105 active:scale-95 relative group"
+            className="w-48 h-48 md:w-64 md:h-64 bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-2xl transition-transform hover:scale-105 active:scale-95 relative group"
           >
             {/* Pulsing Glow behind gift */}
             <div className="absolute inset-0 bg-white/20 blur-2xl rounded-3xl animate-pulse group-hover:bg-white/40 transition-colors" />
-            <span className="text-9xl select-none relative z-10">🎁</span>
+            <span className="text-7xl md:text-9xl select-none relative z-10">🎁</span>
           </div>
-          <p className="mt-8 text-xl font-light tracking-widest text-gray-400 animate-pulse uppercase">
+          <p className="mt-8 text-lg md:text-xl font-light tracking-[0.2em] md:tracking-widest text-gray-400 animate-pulse uppercase">
             Tap to open your surprise
           </p>
 
@@ -201,10 +210,10 @@ export default function App() {
       )}
 
       {opened && (
-        <div className="text-center space-y-8 max-w-2xl px-4">
-          <div className="space-y-6">
+        <div className="text-center space-y-6 md:space-y-8 max-w-2xl px-2">
+          <div className="space-y-4 md:space-y-6">
             <div className="profile-pic opacity-0 flex justify-center">
-              <div className="relative w-40 h-40">
+              <div className="relative w-32 h-32 md:w-40 md:h-40">
                 {/* Rotating Border Spinner */}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-indigo-500 to-purple-500 animate-spin p-1">
                   <div className="w-full h-full rounded-full bg-black/50 backdrop-blur-sm" />
@@ -220,19 +229,19 @@ export default function App() {
                 </div>
               </div>
             </div>
-            <h1 className="text1 text-6xl font-black opacity-0 tracking-tighter">
-              🎉 Happy Birthday 🎉 <span className="text-gradient">Gopinath</span> 
+            <h1 className="text1 text-4xl md:text-6xl font-black opacity-0 tracking-tighter leading-tight">
+              🎉 Happy Birthday 🎉 <br className="md:hidden" /> <span className="text-gradient">Gopinath</span> 
             </h1>
           </div>
           
 
-          <h3 className="text3 text-2xl font-medium opacity-0 text-gray-400 italic">
+          <h3 className="text3 text-lg md:text-2xl font-medium opacity-0 text-gray-400 italic px-4">
             "Turning cloud ideas into reality since 24 years" 
           </h3>
 
           <div className="pt-8">
             <button
-              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full font-bold text-lg shadow-lg hover:shadow-blue-500/30 transition-all hover:-translate-y-1 active:scale-95"
+              className="px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(99,102,241,0.4)] hover:shadow-blue-500/50 transition-all hover:-translate-y-1 active:scale-95 z-20"
               onClick={() => setShowLastSurprise(true)}
             >
               One more surprise...
@@ -240,8 +249,8 @@ export default function App() {
           </div>
 
           {showLastSurprise && (
-            <div className="last-surprise opacity-0 mt-12 mb-20">
-              <div className="relative group perspective-1000 max-w-sm mx-auto">
+            <div className="last-surprise opacity-0 mt-8 md:mt-12 mb-10 md:mb-20">
+              <div className="relative group perspective-1000 w-full max-w-[280px] md:max-w-sm mx-auto">
                 <div className="bg-white p-4 shadow-2xl rounded-sm transform transition-all duration-700 hover:rotate-2 hover:scale-105">
                   <div className="bg-gray-100 rounded-sm overflow-hidden mb-6 aspect-[4/5] relative">
                     <img 
@@ -264,15 +273,13 @@ export default function App() {
               </p>
             </div>
           )}
-        </div>
-      )}
 
-      {opened && (
-        <div className="text3 mt-20 text-center max-w-md opacity-0">
-          <h2 className="text-2xl mb-2 font-bold text-gradient">About Him</h2>
-          <p className="text-gray-400 leading-relaxed">
-            Passionate Salesforce Developer, specialized in building powerful enterprise solutions and pushing the boundaries of the cloud 🚀
-          </p>
+          <div className="text3 mt-12 md:mt-20 text-center max-w-md mx-auto opacity-0 px-4">
+            <h2 className="text-xl md:text-2xl mb-2 font-bold text-gradient">About Him</h2>
+            <p className="text-sm md:text-lg text-gray-400 leading-relaxed pb-10">
+              Passionate Salesforce Developer, specialized in building powerful enterprise solutions and pushing the boundaries of the cloud 🚀
+            </p>
+          </div>
         </div>
       )}
       </div>

@@ -15,11 +15,14 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
-  min-height: 100vh;
   background: black;
+  touch-action: manipulation;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
 }
 
 @keyframes gradientMove {
@@ -33,10 +36,9 @@ body {
   animation: gradientMove 15s ease infinite;
 }
 
-@keyframes float {
-  0% { transform: translateY(0); opacity: 0; }
-  50% { transform: translateY(-100px); opacity: 0.3; }
-  100% { transform: translateY(-200px); opacity: 0; }
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
 @keyframes fadeOut {
@@ -50,10 +52,6 @@ body {
 
 
 
-
-#root {
-  width: 100%;
-}
 
 h1, h2, h3 {
   font-family: 'Outfit', sans-serif;
